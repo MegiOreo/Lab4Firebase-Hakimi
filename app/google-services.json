@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "624906585175",
+    "firebase_url": "https://lab4firebase-hakimi-default-rtdb.firebaseio.com",
+    "project_id": "lab4firebase-hakimi",
+    "storage_bucket": "lab4firebase-hakimi.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:624906585175:android:342bc58fd176a25b07cf12",
+        "android_client_info": {
+          "package_name": "com.example.lab4firebase_hakimi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_zXuZ5EPKDLv82ZphG0vvtreZ2y3hIDM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

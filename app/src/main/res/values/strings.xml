@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Lab4Firebase_Hakimi</string>
+    <string name="enter_name">Enter Name</string>
+    <string name="add_artist">ADD ARTIST</string>
+</resources>
