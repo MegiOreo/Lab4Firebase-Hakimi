@@ -1,10 +1,13 @@
 package com.example.lab4firebase_hakimi;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -55,6 +58,22 @@ public class MainActivity extends AppCompatActivity {
                 addArtist();
             }
         });
+
+//        listViewArtists.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+//            @Override
+//            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                Artist artist = artists.get(i);
+//                showUpdateDeleteDialog(artist.getArtistId(), artist.getArtistName());
+//                return true;
+//            }
+//        });
+
+        listViewArtists.setOnItemLongClickListener((adapterView, view, i, l) -> {
+            Artist artist = artistList.get(i);
+            showUpdateDeleteDialog(artist.getArtistId(), artist.getArtistName());
+            return true;
+        });
+
 
     }
 
@@ -111,6 +130,74 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private boolean updateArtist(String id, String name) {
+        //getting the specified artist reference
+        DatabaseReference dR = FirebaseDatabase.getInstance().getReference("artists").child(id);
+
+        //updating artist
+        Artist artist = new Artist(id, name);
+        dR.setValue(artist);
+        Toast.makeText(getApplicationContext(), "Artist Updated", Toast.LENGTH_LONG).show();
+        return true;
+    }
+
+    private void showUpdateDeleteDialog(final String artistId, String artistName) {
+
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        final View dialogView = inflater.inflate(R.layout.update_dialog, null);
+        dialogBuilder.setView(dialogView);
+
+        final EditText editTextName = (EditText) dialogView.findViewById(R.id.editTextName);
+        //final Spinner spinnerGenre = (Spinner) dialogView.findViewById(R.id.spinnerGenres);
+        final Button buttonUpdate = (Button) dialogView.findViewById(R.id.buttonUpdateArtist);
+        final Button buttonDelete = (Button) dialogView.findViewById(R.id.buttonDeleteArtist);
+
+        dialogBuilder.setTitle(artistName);
+        final AlertDialog b = dialogBuilder.create();
+        b.show();
+
+
+        buttonUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String name = editTextName.getText().toString().trim();
+                //String genre = spinnerGenre.getSelectedItem().toString();
+                if (!TextUtils.isEmpty(name)) {
+                    updateArtist(artistId, name);
+                    b.dismiss();
+                }
+            }
+        });
+
+
+        buttonDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                deleteArtist(artistId);
+                b.dismiss();
+            }
+        });
+    }
+
+    private boolean deleteArtist(String id) {
+        //getting the specified artist reference
+        DatabaseReference dR = FirebaseDatabase.getInstance().getReference("artists").child(id);
+
+        //removing artist
+        dR.removeValue();
+
+        //getting the tracks reference for the specified artist
+        DatabaseReference drTracks = FirebaseDatabase.getInstance().getReference("tracks").child(id);
+
+        //removing all tracks
+        drTracks.removeValue();
+        Toast.makeText(getApplicationContext(), "Artist Deleted", Toast.LENGTH_LONG).show();
+
+        return true;
     }
 
 
